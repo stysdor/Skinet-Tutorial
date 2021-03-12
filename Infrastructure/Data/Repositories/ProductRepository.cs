@@ -20,7 +20,7 @@ namespace Infrastructure.Data.Repositories
         public async Task<Product> GetProductByIdAsync(int id)
         {
             return await _context.Products
-                .Include(p => p.ProductType)
+                .Include(p => p.ProductType) //eager loading
                 .Include(p => p.ProductBrand)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }

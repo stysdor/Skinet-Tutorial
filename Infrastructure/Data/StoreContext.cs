@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
+
 namespace Infrastructure.Data
 {
     public class StoreContext : DbContext
