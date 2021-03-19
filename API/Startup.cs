@@ -51,8 +51,10 @@ namespace API
                 app.UseHsts();
             }
 
-            app.UseStaticFiles();
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }
