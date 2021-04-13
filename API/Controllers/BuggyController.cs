@@ -45,7 +45,7 @@ namespace API.Controllers
         [HttpGet("badrequest/{id}")]
         public ActionResult GeBadRequest(int id)
         {
-            return Ok();
+            return BadRequest(new ApiValidationErrorResponse());
         }
     }
 }
