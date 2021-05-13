@@ -1,5 +1,7 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,19 +11,31 @@ namespace Infrastructure.Data.Repositories
 {
     public class BasketRepository : IBasketRepository
     {
-        public Task<bool> DeleteBasketAsync(string basketId)
+        private readonly IDatabase _database;
+
+        public BasketRepository(IConnectionMultiplexer redis)
         {
-            throw new NotImplementedException();
+            _database = redis.GetDatabase();
         }
 
-        public Task<CustomerBasket> GetBasketAsync(string basketId)
+        public async Task<bool> DeleteBasketAsync(string basketId)
         {
-            throw new NotImplementedException();
+            return await _database.KeyDeleteAsync(basketId);
         }
 
-        public Task<CustomerBasket> UpdateBasketAsyn(CustomerBasket basket)
+        public  async Task<CustomerBasket> GetBasketAsync(string basketId)
         {
-            throw new NotImplementedException();
+            var data = await _database.StringGetAsync(basketId);
+
+            return data.IsNullOrEmpty ? null : JsonConvert.DeserializeObject<CustomerBasket>(data);
+        }
+
+        public async Task<CustomerBasket> UpdateBasketAsyn(CustomerBasket basket)
+        {
+            var created = await _database.StringSetAsync(basket.Id,
+                    JsonConvert.SerializeObject(basket), TimeSpan.FromDays(30));
+            if (!created) return null;
+            return await GetBasketAsync(basket.Id);
         }
     }
 }
