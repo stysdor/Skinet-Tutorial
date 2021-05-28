@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Net;
 using API.Errors;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
 
 namespace API.Middleware
 {
@@ -15,10 +16,10 @@ namespace API.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionMiddleware> _logger;
-        private readonly IHostingEnvironment _env;
+        private readonly IHostEnvironment _env;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, 
-            IHostingEnvironment env)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger,
+            IHostEnvironment env)
         {
             _next = next;
             _logger = logger;
