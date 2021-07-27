@@ -16,12 +16,14 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): import("rxjs")
     .Observable<HttpEvent<any>> {
-    this.busyService.busy();
-    return next.handle(request).pipe(
-      delay(1000),
-      finalize(() => {
-        this.busyService.idle();
-      }));
+    if (!request.url.includes('emailexists')) {
+      this.busyService.busy();
+    }
+      return next.handle(request).pipe(
+        delay(1000),
+        finalize(() => {
+          this.busyService.idle();
+        }));
     
   }
 }
